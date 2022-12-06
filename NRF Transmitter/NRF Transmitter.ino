@@ -9,7 +9,6 @@ unsigned int counter = 1;
 
 void setup() {
   Serial.begin(9600);
-  // Initialize device.
 
   // Initialize device.
   if (!radio.begin()) {
@@ -31,9 +30,12 @@ void loop() {
   counter++;
   if(radio.write(&text, sizeof(text))){
     // Mensaje recibido
-    Serial.println("SUCCESS!");
+    Serial.print("SUCCESS! n: ");
   } else {
     // Mensaje no recibido
-    Serial.println("FAILURE!");
+    Serial.print("FAILURE! n: ");
   }
+
+  Serial.println(counter);
+  Serial.println("-----------------------------");
 }
