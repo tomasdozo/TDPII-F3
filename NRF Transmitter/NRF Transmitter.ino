@@ -11,7 +11,6 @@
 #include <DHT.h>
 #include <DHT_U.h>
 #include <SPI.h>
-#include "nRF24L01.h"
 #include "RF24.h"
 
 #define DHTPIN 2  // Digital pin connected to the DHT sensor
@@ -33,6 +32,7 @@ const byte address[6] = "tomas";
 char text[32];
 char temperature[4];
 char humidity [2]="10";
+unsigned int counter = 1;
 
 
 uint32_t delayMS;
@@ -41,7 +41,11 @@ void setup() {
   //Serial.begin(9600);
   // Initialize device.
 
-  radio.begin();
+  // Initialize device.
+  if (!radio.begin()) {
+    Serial.println("radio hardware is not responding!!");
+    while (1) {}    
+  }
   //Set module as transmitter
   radio.stopListening();
   //set the address
@@ -90,7 +94,7 @@ void setup() {
   Serial.println(F("%"));
   Serial.println(F("------------------------------------"));*/
   // Set delay between sensor readings based on sensor details.
-  delayMS = sensor.min_delay / 1000;
+  delayMS = sensor.min_delay / 500;
 }
 
 void loop() {
@@ -118,7 +122,8 @@ void loop() {
     dtostrf(event.relative_humidity,2,0,humidity);
 
   }
-  sprintf(text,"Temp: %s °C. Hum: %s%%",temperature,humidity);
+  sprintf(text,"Temp: %s C. Hum: %s%%, n: %i",temperature,humidity, counter);
+  counter++;
   if(radio.write(&text, sizeof(text))){
     //Serial.println("SUCCESS!");
   }
