@@ -18,8 +18,8 @@
 // Pin 15 can work but DHT must be disconnected during program upload.
 
 // Uncomment the type of sensor in use:
-//#define DHTTYPE    DHT11     // DHT 11
-#define DHTTYPE DHT11  // DHT 22 (AM2302)
+#define DHTTYPE    DHT11     // DHT 11
+//#define DHTTYPE    DHT22  // DHT 22 (AM2302)
 //#define DHTTYPE    DHT21     // DHT 21 (AM2301)
 
 // See guide for details on sensor wiring and usage:
@@ -38,8 +38,7 @@ unsigned int counter = 1;
 uint32_t delayMS;
 
 void setup() {
-  //Serial.begin(9600);
-  // Initialize device.
+  Serial.begin(9600);
 
   // Initialize device.
   if (!radio.begin()) {
@@ -52,11 +51,12 @@ void setup() {
   radio.openWritingPipe(address);
 
   dht.begin();
-  //Serial.println(F("DHTxx Unified Sensor Example"));
+  Serial.println(F("DHT11 Unified Sensor"));
+
   // Print temperature sensor details.
   sensor_t sensor;
   dht.temperature().getSensor(&sensor);
-  /*Serial.println(F("------------------------------------"));
+  Serial.println(F("------------------------------------"));
   Serial.println(F("Temperature Sensor"));
   Serial.print(F("Sensor Type: "));
   Serial.println(sensor.name);
@@ -66,17 +66,18 @@ void setup() {
   Serial.println(sensor.sensor_id);
   Serial.print(F("Max Value:   "));
   Serial.print(sensor.max_value);
-  Serial.println(F("°C"));
+  Serial.println(F("C"));
   Serial.print(F("Min Value:   "));
   Serial.print(sensor.min_value);
-  Serial.println(F("°C"));
+  Serial.println(F("C"));
   Serial.print(F("Resolution:  "));
   Serial.print(sensor.resolution);
-  Serial.println(F("°C"));
-  Serial.println(F("------------------------------------"));*/
+  Serial.println(F("C"));
+  Serial.println(F("------------------------------------"));
+
   // Print humidity sensor details.
   dht.humidity().getSensor(&sensor);
-  /*Serial.println(F("Humidity Sensor"));
+  Serial.println(F("Humidity Sensor"));
   Serial.print(F("Sensor Type: "));
   Serial.println(sensor.name);
   Serial.print(F("Driver Ver:  "));
@@ -92,7 +93,8 @@ void setup() {
   Serial.print(F("Resolution:  "));
   Serial.print(sensor.resolution);
   Serial.println(F("%"));
-  Serial.println(F("------------------------------------"));*/
+  Serial.println(F("------------------------------------"));
+
   // Set delay between sensor readings based on sensor details.
   delayMS = sensor.min_delay / 500;
 }
@@ -106,28 +108,32 @@ void loop() {
   if (isnan(event.temperature)) {
     Serial.println(F("Error reading temperature!"));
   } else {
-    //Serial.print(F("Temperature: "));
-    //Serial.print(event.temperature);
-    //Serial.println(F("C"));
+    Serial.print(F("Temperature: "));
+    Serial.print(event.temperature);
+    Serial.println(F("C"));
     dtostrf(event.temperature,4,1,temperature);
   }
   // Get humidity event and print its value.
   dht.humidity().getEvent(&event);
   if (isnan(event.relative_humidity)) {
-    //Serial.println(F("Error reading humidity!"));
+    Serial.println(F("Error reading humidity!"));
   } else {
-    //Serial.print(F("Humidity: "));
-    //Serial.print(event.relative_humidity);
-    //Serial.println(F("%"));
+    Serial.print(F("Humidity: "));
+    Serial.print(event.relative_humidity);
+    Serial.println(F("%"));
     dtostrf(event.relative_humidity,2,0,humidity);
 
   }
   sprintf(text,"Temp: %s C. Hum: %s%%, n: %i",temperature,humidity, counter);
   counter++;
   if(radio.write(&text, sizeof(text))){
-    //Serial.println("SUCCESS!");
+    // Mensaje recibido
+    Serial.println("SUCCESS!");
   }
   else{
-    //Serial.println("FAILURE!");
+    // Mensaje recibido
+    Serial.println("FAILURE!");
   }
+
+  Serial.println("-----------------------------");
 }
