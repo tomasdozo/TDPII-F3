@@ -1,7 +1,7 @@
 //Include Libraries
 #include <SPI.h>
-#include "nRF24L01.h"
 #include "RF24.h"
+
 
 //create an RF24 object
 RF24 radio(9, 8);  // CE, CSN
@@ -21,13 +21,21 @@ void setup()
   Serial.println("Hello World!");
 
   // Initialize device.
-  radio.begin();
+  if (!radio.begin()) {
+    Serial.println("radio hardware is not responding!!");
+    while (1) {}    
+  }
   
+  Serial.println("radio initialized");
+
   // Set the address. The first argument is the number of the stream, we only created one
   radio.openReadingPipe(0, address);
   
   // Set module as receiver
   radio.startListening();
+
+  Serial.println("radio listening");
+  Serial.println("-----------------------------");
 }
 
 void loop()
@@ -41,6 +49,6 @@ void loop()
     radio.read(&text, sizeof(text));
     // Print data on the Serial monitor
     Serial.println(text);
-    Serial.println("Bye World!");
+    Serial.println("-----------------------------");
   }
 }
