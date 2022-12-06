@@ -27,7 +27,6 @@ void loop() {
   // Delay 1 second between messages.
   delay(1000);
   sprintf(text,"Example message, n: %i", counter);
-  counter++;
   if(radio.write(&text, sizeof(text))){
     // Mensaje recibido
     Serial.print("SUCCESS! n: ");
@@ -38,4 +37,5 @@ void loop() {
 
   Serial.println(counter);
   Serial.println("-----------------------------");
+  counter++;
 }
