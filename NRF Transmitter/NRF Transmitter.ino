@@ -128,12 +128,12 @@ void loop() {
   counter++;
   if(radio.write(&text, sizeof(text))){
     // Mensaje recibido
-    Serial.println("SUCCESS!");
-  }
-  else{
-    // Mensaje recibido
-    Serial.println("FAILURE!");
+    Serial.print("SUCCESS! n: ");
+  } else {
+    // Mensaje no recibido
+    Serial.print("FAILURE! n: ");
   }
 
+  Serial.println(counter);
   Serial.println("-----------------------------");
 }
