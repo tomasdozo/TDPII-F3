@@ -125,7 +125,6 @@ void loop() {
 
   }
   sprintf(text,"Temp: %s C. Hum: %s%%, n: %i",temperature,humidity, counter);
-  counter++;
   if(radio.write(&text, sizeof(text))){
     // Mensaje recibido
     Serial.print("SUCCESS! n: ");
@@ -136,4 +135,5 @@ void loop() {
 
   Serial.println(counter);
   Serial.println("-----------------------------");
+  counter++;
 }
